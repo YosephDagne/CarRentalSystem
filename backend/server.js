@@ -1,22 +1,28 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import mongoose from "mongoose";
+import carRoutes from "./routes/carRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import bookingRoutes from "./routes/bookingRoutes.js";
+import connectDB from "./config/db.js";
 
-dotenv.config(); // Load environment variables
+dotenv.config();
 
 const app = express();
-const port = process.env.PORT 
+const port = process.env.PORT || 5000;
 
+// Connect to MongoDB
+connectDB();
 // Middleware
-app.use(express.json()); 
-app.use(cors()); 
+app.use(express.json());
+app.use(cors());
 
-// Test route
-app.get("/", (req, res) => {
-  res.send("Car Rental System API is running...");
-});
+// Routes
+app.use("/api/cars", carRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/bookings", bookingRoutes);
 
-// Start server
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server running on port ${port}`);
 });
